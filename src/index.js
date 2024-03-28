@@ -16,3 +16,12 @@ root.render(
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
+// {spinning ? (
+//   <button type="button" id="reset" onClick={resetSpin}>
+//     reset
+//   </button>
+// ) : (
+//   <button type="button" id="spin" onClick={spin}>
+//     spin
+//   </button>
+// )}

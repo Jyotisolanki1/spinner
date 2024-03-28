@@ -4,13 +4,8 @@ import Spinner from './spinner'
 
 export default function Main() {
   return (
- <div className="grid grid-cols-2 gap-4">
-  <div>
-     <WebcamCom/>
-  </div>
-  <div>
+ <div className="grid">
     <Spinner/>
-  </div>
 </div>
   )
 }
