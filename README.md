@@ -1,70 +1,104 @@
-# Getting Started with Create React App
+import React, { useState, useEffect } from 'react';
+import image from '../assets/wheelImage.png'
+import '../App.css'; // Assuming you have a CSS file for styling
+import Congrate from './congratulations';
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+const Spinner = () => {
+  const [spin, setSpin] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [congrate,setCongrate] = useState(false)
 
-## Available Scripts
 
-In the project directory, you can run:
+  const user = ["user1", "user2", "user3", "user4", "user5", "user6"];
 
-### `npm start`
+  const spining = () => {
+    // Start spinning after component mounts
+    setSpin(true);
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+    // Stop spinning after 5 seconds
+    const timer = setTimeout(() => {
+      setSpin(false);
+      setCongrate(true)
+    }, 3000);
+    
+    return () => clearTimeout(timer); // Clear the timer on component unmount
+  };
+  let interval
+  useEffect(() => {
+    if (spin) {
+      interval = setInterval(() => {
+        // Randomly select a user from the users array
+        const randomIndex = Math.floor(Math.random() * user.length);
+        setSelectedUser(user[randomIndex]);
+        setCongrate(false)
+      }, 100); // Adjust the interval as needed
+    }
+    return () => clearInterval(interval);
+  }, [spin, user,congrate]);
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+  return (
+    <div className='mt-5'>
+    {congrate&&<Congrate/>}
+      <div className='flex flex-end'>
+    
+          <div
+            className="text-white bg-gradient-to-r from-cyan-800 via-cyan-500 to-cyan-700 hover:bg-gradient-to-br focus:ring-4 border-cyan-900 focus:ring-cyan-300 ml-3 shadow-black-600 dark:focus:ring-cyan-800 rounded-3xl font-medium text-sm px-5 py-2.5 text-center h-24 p-5 content-center"
+            style={{ border: "10px solid #148181", width:"40%", position:"absolute", top:"34%", right:"4%",left:"9%"}} // Add inline style for border
+          >
+            {selectedUser}
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+        </div>
+        <img className={`spinner ${spin ? 'spin-animation' : ''}`} src={image} alt="Spinner"  style={{position:"relative", left:"45%" ,top:"7%"}}/>
+        
+      </div>
+      <div>
+        <button type="button" onClick={spining} class="text-white bg-gradient-to-r from-cyan-700 via-cyan-800 to-cyan-800 hover:bg-gradient-to-br focus:ring-4 border-green-300 focus:ring-cyan-300 p-3 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm text-center content-center ml-3">spin</button>
+      </div>
+    </div>
 
-### `npm run build`
+  );
+};
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+export default Spinner;
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+body{
+  background: linear-gradient(300deg,rgb(12, 64, 82),rgb(154, 187, 218),rgb(13, 13, 36));
+  background-size: 180% 180%;
+  animation: gradient-animation 7s ease infinite;
+}
 
-### `npm run eject`
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+.spin-animation {
+  animation: spin 4s linear infinite; /* Adjust the duration to make it spin slower or faster */
+}
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(180deg); /* Spin slowly for the first part */
+  }
+  30% {
+    transform: rotate(1000deg); /* Spin quickly for the middle part */
+  }
+  40% {
+    transform: rotate(1800deg); /* Spin slowly for the last part */
+  }
+  100% {
+    transform: rotate(2160deg); /* Complete rotation */
+  }
+}
